@@ -1,17 +1,43 @@
-import React from 'react';
+import * as React from "react";
 import ReactDOM from 'react-dom/client';
+import 'trix';
+import 'trix/dist/trix.css';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { TrixEditor } from "react-trix";
+ 
+export class Editor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
+  handleChange(html, text) {
+    this.setState({value: text});
+  }
+  
+  handleSubmit() {
+    console.log(this.state.value);
+  }
+  
+  render() {
+    return (
+      <div className="editor-container">
+        <div className="toolbar">
+          <button onClick={this.handleSubmit}>Save</button>
+        </div>
+        <div className="editor">
+          <TrixEditor onChange={this.handleChange} />
+        </div>
+      </div>
+    );
+  }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// ========================================
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Editor />);
+

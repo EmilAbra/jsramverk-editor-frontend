@@ -1,0 +1,12 @@
+.editor-container {
+    max-width: 50%;
+    margin: 0 auto;
+}
+
+.toolbar {
+    margin: 0 auto;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 50%;
+}

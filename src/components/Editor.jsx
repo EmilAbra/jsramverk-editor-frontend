@@ -1,17 +1,13 @@
 import * as React from "react";
-
 import 'trix';
 import 'trix/dist/trix.css';
 import './editor.css';
+import "../index.css";
 import { TrixEditor } from "react-trix";
 import SelectAllDocs from "./DocsAll";
 import SaveDoc from "./DocSave";
 import NewDoc from "./DocNew";
 import {useState} from 'react';
-
-import docsModel from '../models/docs';
-import "../index.css";
-
 
 export default function Editor(props) {
     const [newDoc, setNewDoc] = useState({});

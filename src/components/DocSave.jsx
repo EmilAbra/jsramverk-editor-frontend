@@ -3,11 +3,19 @@ import docsModel from '../models/docs';
 
 export default function SaveDoc(props) {
     async function saveDoc() {
-        const doc = await docsModel.getDoc(props.newDoc.name);
+        const doc = await docsModel.getDoc(props.currentDoc.name);
         if (doc) {
-            await docsModel.updateDoc(props.currentDoc);
+            const result = await docsModel.updateDoc(props.currentDoc);
+            console.log(result.status
+                );
+            if (result.status === 204) {
+                alert(`Document ${doc.name} was saved.`)
+            }
         } else {
-            await docsModel.saveDoc(props.newDoc);
+            const result = await docsModel.saveDoc(props.newDoc);
+            if (result.status === 201) {
+                alert(`Document was saved as ${props.newDoc.name}.`)
+            }
         }
         props.setAlldocs();
     }

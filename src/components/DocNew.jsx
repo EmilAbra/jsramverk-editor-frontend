@@ -5,7 +5,6 @@ const initialState = {
   content: '',
 };
 
-
 export default function NewDoc(props) {
     function resetState() {
     props.setCurrentDoc(initialState);

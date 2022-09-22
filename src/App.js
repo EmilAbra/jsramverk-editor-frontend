@@ -24,7 +24,7 @@ function App() {
     useEffect(() => {
         (async () => {
             await fetchDocs();
-            console.log(currentDoc);
+            // console.log(currentDoc);
         })();
     }, [currentDoc]);
 

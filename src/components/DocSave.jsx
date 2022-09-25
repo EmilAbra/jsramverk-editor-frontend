@@ -6,8 +6,6 @@ export default function SaveDoc(props) {
         const doc = await docsModel.getDoc(props.currentDoc.name);
         if (doc) {
             const result = await docsModel.updateDoc(props.currentDoc);
-            console.log(result.status
-                );
             if (result.status === 204) {
                 alert(`Document ${doc.name} was saved.`)
             }

@@ -14,6 +14,7 @@ export default function Editor(props) {
 
     function handleNameChange(event) {
         let newObject = {};
+
         newObject['name'] = event.target.value;
 
         props.setCurrentDoc((old) => ({...old, ...newObject}));
@@ -22,6 +23,7 @@ export default function Editor(props) {
 
     function handleContentChange(html, text) {
         let newObject = {};
+
         newObject['content'] = text;
 
         props.setCurrentDoc((old) => ({...old, ...newObject}));
@@ -29,11 +31,11 @@ export default function Editor(props) {
     }
 
     function setEditorContent(content) {
-      let element = document.querySelector("trix-editor");
+        let element = document.querySelector("trix-editor");
 
-      element.value = "";
-      element.editor.setSelectedRange([0, 0]);
-      element.editor.insertHTML(content);
+        element.value = "";
+        element.editor.setSelectedRange([0, 0]);
+        element.editor.insertHTML(content);
     }
 
     return (
@@ -60,5 +62,5 @@ export default function Editor(props) {
                 <TrixEditor onChange={handleContentChange}/>
             </div>
         </main>
-    )
+    );
 }

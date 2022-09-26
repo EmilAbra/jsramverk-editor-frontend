@@ -42,7 +42,15 @@ function App() {
                     </div>
                     <Routes>
                         <Route exact path="/" element={<Home />} />
-                        <Route exact path="editor" element={<Editor docs={docs} setAlldocs={fetchDocs} setCurrentDoc={setCurrentDoc} currentDoc={currentDoc} />} />
+                        <Route
+                            exact path="editor"
+                            element={<Editor
+                                docs={docs}
+                                setAlldocs={fetchDocs}
+                                setCurrentDoc={setCurrentDoc}
+                                currentDoc={currentDoc}
+                            />}
+                        />
                         <Route exact path="page2" element={<Page2 />} />
                         <Route exact path="page3" element={<Page3 />} />
                     </Routes>

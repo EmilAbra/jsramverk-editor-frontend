@@ -1,19 +1,10 @@
-import React from 'react'
+import { render, screen } from '@testing-library/react';
+import NewDoc from './DocNew';
 
-const initialState = {
-  name: '',
-  content: '',
-};
+// const faker = jest.fn();
 
-export default function NewDoc(props) {
-    function resetState() {
-    props.setCurrentDoc(initialState);
-    props.setContent("");
-    }
-
-    return (
-        <div className="new-doc">
-            <button onClick={resetState}>New document</button>
-        </div>
-    )
-}
+test('renders new document button', () => {
+    render(<NewDoc />);
+    const button = screen.getByText(/new document/i);
+    expect(button).toBeInTheDocument();
+});

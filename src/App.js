@@ -1,6 +1,7 @@
 
 import { BrowserRouter as Router, Route, Link, Routes}
     from "react-router-dom";
+import { io } from "socket.io-client";
 
 import Home from "./components/Welcome";
 import Editor from "./components/Editor";
@@ -11,9 +12,12 @@ import docsModel from './models/docs';
 import {useState, useEffect} from 'react';
 import "./App.css";
 
+const SERVER_URL = 'http://localhost:1337';
+
 function App() {
     const [docs, setDocs] = useState([]);
     const [currentDoc, setCurrentDoc] = useState({});
+    const [socket, setSocket] = useState(null);
 
     async function fetchDocs() {
         const allDocs = await docsModel.getAllDocs();
@@ -27,6 +31,16 @@ function App() {
             // console.log(currentDoc);
         })();
     }, [currentDoc]);
+
+    useEffect(() => {
+        setSocket(io(SERVER_URL));
+
+        return () => {
+            if (socket) {
+                socket.disconnect();
+            }
+        };
+    }, []);
 
     return (
         <div className="App">

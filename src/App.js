@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 
 import Home from "./components/Welcome";
 import Editor from "./components/Editor";
-import Page2 from "./components/page2";
+import Auth from "./components/Auth";
 import Page3 from "./components/page3";
 
 import docsModel from './models/docs';
@@ -26,6 +26,7 @@ function App() {
     const [currentDoc, setCurrentDoc] = useState({});
     const [socket, setSocket] = useState(null);
     const [selectedDoc, setSelectedDoc] = useState({});
+    const [token, setToken] = useState("");
 
     async function fetchDocs() {
         const allDocs = await docsModel.getAllDocs();
@@ -85,7 +86,7 @@ function App() {
                         <ul className="ul-nav">
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="editor">Editor</Link></li>
-                            <li><Link to="page2">To be...</Link></li>
+                            <li><Link to="login">Login</Link></li>
                             <li><Link to="page3">To be...</Link></li>
                         </ul>
                     </div>
@@ -102,7 +103,7 @@ function App() {
                                 currentDoc={currentDoc}
                             />}
                         />
-                        <Route exact path="page2" element={<Page2 />} />
+                        <Route exact path="login" element={<Auth setToken={setToken}/>} />
                         <Route exact path="page3" element={<Page3 />} />
                     </Routes>
                 </Router>

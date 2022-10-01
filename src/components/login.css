@@ -1,0 +1,29 @@
+
+input[type=email], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.form-container {
+    padding: 16px;
+}
+
+.form-button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-button {
+    margin-right: 200px;
+}
+
+.auth-container {
+    max-width: 25%;
+    margin: 0 auto;
+    border: 2px solid silver;
+    padding: 10px;
+}

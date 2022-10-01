@@ -9,7 +9,8 @@ export default function SelectAllDocs(props) {
             const doc = await docsModel.getDoc(docName);
 
             props.setCurrentDoc(doc);
-            props.setContent(doc.content);
+            props.setSelectedDoc(doc);
+            props.setContent(doc.content, true);
         }
     }
 

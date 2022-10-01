@@ -9,15 +9,23 @@ import Page2 from "./components/page2";
 import Page3 from "./components/page3";
 
 import docsModel from './models/docs';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import "./App.css";
 
-const SERVER_URL = 'http://localhost:1337';
+const SERVER_URL = 'http://localhost:1337' ||
+'https://jsramverk-editor-emab21.azurewebsites.net';
+
+let sendToSocket = false;
+
+function changeSendToSocket(value) {
+    sendToSocket = value;
+}
 
 function App() {
     const [docs, setDocs] = useState([]);
     const [currentDoc, setCurrentDoc] = useState({});
     const [socket, setSocket] = useState(null);
+    const [selectedDoc, setSelectedDoc] = useState({});
 
     async function fetchDocs() {
         const allDocs = await docsModel.getAllDocs();
@@ -25,22 +33,49 @@ function App() {
         setDocs(allDocs);
     }
 
+    function setEditorContent(content, triggerChange) {
+        let element = document.querySelector("trix-editor");
+
+        changeSendToSocket(triggerChange);
+        element.value = "";
+        element.editor.setSelectedRange([0, 0]);
+        changeSendToSocket(triggerChange);
+        element.editor.insertHTML(content);
+    }
+
     useEffect(() => {
         (async () => {
             await fetchDocs();
-            // console.log(currentDoc);
         })();
+        if (socket && sendToSocket) {
+            socket.emit("docsData", currentDoc);
+        }
+        changeSendToSocket(true);
     }, [currentDoc]);
 
     useEffect(() => {
-        setSocket(io(SERVER_URL));
+        if (socket) {
+            socket.emit("create", selectedDoc._id);
+        }
+    }, [selectedDoc]);
 
+
+    useEffect(() => {
+        setSocket(io(SERVER_URL));
         return () => {
             if (socket) {
                 socket.disconnect();
             }
         };
     }, []);
+
+    useEffect(() => {
+        if (socket) {
+            socket.on("docsData", function (data) {
+                setEditorContent(data.content, false);
+            });
+        }
+    }, [socket]);
 
     return (
         <div className="App">
@@ -59,9 +94,11 @@ function App() {
                         <Route
                             exact path="editor"
                             element={<Editor
+                                setSelectedDoc={setSelectedDoc}
                                 docs={docs}
                                 setAlldocs={fetchDocs}
                                 setCurrentDoc={setCurrentDoc}
+                                setContent={setEditorContent}
                                 currentDoc={currentDoc}
                             />}
                         />

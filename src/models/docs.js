@@ -3,10 +3,10 @@
  */
 
 const docs = {
-    // baseUrl: window.location.href.includes("localhost") ?
-    //     'http://localhost:1337' :
-    //     'https://jsramverk-editor-emab21.azurewebsites.net',
-    baseUrl: 'https://jsramverk-editor-emab21.azurewebsites.net',
+    // baseUrl: 'http://localhost:1337',
+    baseUrl: window.location.href.includes("localhost") ?
+        'http://localhost:1337' :
+        'https://jsramverk-editor-emab21.azurewebsites.net',
     getDoc: async function getDoc(name) {
         const response = await fetch(`${docs.baseUrl}/editor/${name}`);
         const result = await response.json();

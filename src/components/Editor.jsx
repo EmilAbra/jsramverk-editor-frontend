@@ -30,20 +30,12 @@ export default function Editor(props) {
         setNewDoc({...newDoc, ...newObject});
     }
 
-    function setEditorContent(content) {
-        let element = document.querySelector("trix-editor");
-
-        element.value = "";
-        element.editor.setSelectedRange([0, 0]);
-        element.editor.insertHTML(content);
-    }
-
     return (
         <main>
             <div className="toolbar">
                 <NewDoc
                     setCurrentDoc={props.setCurrentDoc}
-                    setContent={setEditorContent}
+                    setContent={props.setContent}
                 />
                 <SaveDoc
                     newDoc={newDoc}
@@ -53,9 +45,10 @@ export default function Editor(props) {
                 />
                 <SelectAllDocs
                     docs={props.docs}
-                    setContent={setEditorContent}
+                    setContent={props.setContent}
                     setCurrentDoc={props.setCurrentDoc}
                     currentDoc={props.currentDoc}
+                    setSelectedDoc={props.setSelectedDoc}
                 />
             </div>
             <div className="editor-container">

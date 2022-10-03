@@ -8,13 +8,13 @@ const docs = {
         'http://localhost:1337' :
         'https://jsramverk-editor-emab21.azurewebsites.net',
     getDoc: async function getDoc(name) {
-        const response = await fetch(`${docs.baseUrl}/editor/${name}`);
+        const response = await fetch(`${docs.baseUrl}/editor/doc/${name}`);
         const result = await response.json();
 
         return result.data;
     },
-    getAllDocs: async function getAllDocs(token) {
-        const response = await fetch(`${docs.baseUrl}/editor`, {
+    getAllDocs: async function getAllDocs(token, user) {
+        const response = await fetch(`${docs.baseUrl}/editor/${user.email}`, {
             headers: {
                 'x-access-token': token,
             }

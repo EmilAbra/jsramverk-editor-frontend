@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Route, Link, Routes}
     from "react-router-dom";
 import { io } from "socket.io-client";
@@ -31,7 +30,7 @@ function App() {
     const [user, setUser] = useState({});
 
     async function fetchDocs() {
-        const allDocs = await docsModel.getAllDocs(token);
+        const allDocs = await docsModel.getAllDocs(token, user);
 
         setDocs(allDocs);
     }

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import authModel from '../models/authModel';
 import './login.css';
 
-export default function Login({setToken}) {
+export default function Login({setToken, user, setUser}) {
     const navigate = useNavigate();
-    const [user, setUser] = useState({});
 
     function changeHandler(event) {
         let newObject = {};

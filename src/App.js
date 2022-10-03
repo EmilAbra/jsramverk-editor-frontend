@@ -28,6 +28,7 @@ function App() {
     const [socket, setSocket] = useState(null);
     const [selectedDoc, setSelectedDoc] = useState({});
     const [token, setToken] = useState("");
+    const [user, setUser] = useState({});
 
     async function fetchDocs() {
         const allDocs = await docsModel.getAllDocs(token);
@@ -112,7 +113,13 @@ function App() {
                                 />}
                             />
                             :
-                            <Route exact path="login" element={<Auth setToken={setToken}/>} />
+                            <Route exact path="login"
+                                element={<Auth
+                                    setToken={setToken}
+                                    user={user}
+                                    setUser={setUser}
+                                />}
+                            />
                         }
                         <Route exact path="page3" element={<Page3 />} />
                         <Route exact path="page4" element={<Page4 />} />

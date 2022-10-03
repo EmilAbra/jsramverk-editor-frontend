@@ -13,8 +13,12 @@ const docs = {
 
         return result.data;
     },
-    getAllDocs: async function getAllDocs() {
-        const response = await fetch(`${docs.baseUrl}/editor`);
+    getAllDocs: async function getAllDocs(token) {
+        const response = await fetch(`${docs.baseUrl}/editor`, {
+            headers: {
+                'x-access-token': token,
+            }
+        });
         const allDocs = await response.json();
 
         return allDocs.data;

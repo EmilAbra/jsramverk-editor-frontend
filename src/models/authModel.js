@@ -7,7 +7,7 @@ const auth = {
         'http://localhost:1337' :
         'https://jsramverk-editor-emab21.azurewebsites.net',
     login: async function login(user) {
-        const response = await fetch(`${auth.baseURL}/login`, {
+        const response = await fetch(`${auth.baseUrl}/auth/login`, {
             method: "POST",
             body: JSON.stringify(user),
             headers: {
@@ -19,8 +19,18 @@ const auth = {
 
         return result;
     },
-    register: async function register() {
+    register: async function register(user) {
+        const response = await fetch(`${auth.baseUrl}/auth/register`, {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: {
+                'content-type': 'application/json'
+            },
+        });
 
+        const result = await response.json();
+
+        return result;
     }
 };
 

@@ -22,8 +22,10 @@ export default function SelectAllDocs(props) {
                 id="selectOne"
             >
                 <option value="-99" key="0">Choose a document</option>
-                {props.docs
-                    .map((doc, index) => <option value={doc.name} key={index}>{doc.name}</option>)}
+                {props.docs ? props.docs
+                    .map((doc, index) => <option value={doc.name} key={index}>{doc.name}</option>)
+                    : ""
+                }
             </select>
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import authModel from '../models/auth';
+import authModel from '../models/authModel';
 import './login.css';
 
 export default function Login({setToken}) {
@@ -18,31 +18,35 @@ export default function Login({setToken}) {
     async function register() {
         const registerResult = await authModel.register(user);
 
-        if (registerResult) {
-            alert("User successfully created!");
+        if (registerResult.data) {
+            alert(registerResult.data.message);
             login();
+        } else {
+            alert(registerResult.errors.message);
         }
     }
 
     async function login() {
         const loginResult = await authModel.login(user);
 
+        // console.log(loginResult);
         if (loginResult.data.token) {
             setToken(loginResult.data.token);
             navigate('/editor');
+        } else {
+            alert(loginResult.data.message);
         }
     }
     return (
-        <form>
+        <>
             <div className='form-container'>
                 <label htmlFor="username">Email</label>
                 <input
                     placeholder='Enter email'
                     type="email"
                     minLength={6}
-                    name="username"
+                    name="email"
                     id="username"
-                    // value={userName}
                     onChange={changeHandler}
                 />
                 <label htmlFor="password">Password</label>
@@ -52,14 +56,13 @@ export default function Login({setToken}) {
                     minLength={6}
                     name="password"
                     id="password"
-                    // value={userName}
                     onChange={changeHandler}
                 />
                 <div className='form-button-container'>
                     <button className='register-button' onClick={register}>REGISTER</button>
-                    <button onClick={login}>SIGN IN</button>
+                    <button className='sign-in-button' onClick={login}>SIGN IN</button>
                 </div>
             </div>
-        </form>
+        </>
     );
 }

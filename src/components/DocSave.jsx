@@ -1,5 +1,5 @@
 import React from 'react';
-import docsModel from '../models/docs';
+import docsModel from '../models/docsModel';
 
 export default function SaveDoc(props) {
     async function saveDoc() {
@@ -12,7 +12,7 @@ export default function SaveDoc(props) {
                 alert(`Document ${doc.name} was saved.`);
             }
         } else {
-            const result = await docsModel.saveDoc(props.newDoc);
+            const result = await docsModel.saveDoc(props.newDoc, props.user);
 
             if (result.status === 201) {
                 alert(`Document was saved as ${props.newDoc.name}.`);

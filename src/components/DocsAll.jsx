@@ -1,5 +1,5 @@
 import React from 'react';
-import docsModel from '../models/docs';
+import docsModel from '../models/docsModel';
 
 export default function SelectAllDocs(props) {
     async function fetchDoc(event) {

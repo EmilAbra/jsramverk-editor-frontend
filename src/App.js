@@ -8,7 +8,7 @@ import Auth from "./components/LoginAuth";
 import Page3 from "./components/page3";
 import Page4 from "./components/page4";
 
-import docsModel from './models/docs';
+import docsModel from './models/docsModel';
 import { useState, useEffect } from 'react';
 import "./App.css";
 
@@ -109,6 +109,7 @@ function App() {
                                     setCurrentDoc={setCurrentDoc}
                                     setContent={setEditorContent}
                                     currentDoc={currentDoc}
+                                    user={user}
                                 />}
                             />
                             :

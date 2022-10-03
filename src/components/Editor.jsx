@@ -42,6 +42,7 @@ export default function Editor(props) {
                     currentDoc={props.currentDoc}
                     setAlldocs={props.setAlldocs}
                     handleNameChange={handleNameChange}
+                    user={props.user}
                 />
                 <SelectAllDocs
                     docs={props.docs}

@@ -46,9 +46,11 @@ function App() {
     }
 
     useEffect(() => {
-        (async () => {
-            await fetchDocs();
-        })();
+        if (token) {
+            (async () => {
+                await fetchDocs();
+            })();
+        }
     }, [token]);
 
     useEffect(() => {

@@ -7,6 +7,7 @@ import { TrixEditor } from "react-trix";
 import SelectAllDocs from "./DocsAll";
 import SaveDoc from "./DocSave";
 import NewDoc from "./DocNew";
+import DocPermission from "./DocPermissions";
 import {useState} from 'react';
 
 export default function Editor(props) {
@@ -43,6 +44,9 @@ export default function Editor(props) {
                     setAlldocs={props.setAlldocs}
                     handleNameChange={handleNameChange}
                     user={props.user}
+                />
+                <DocPermission
+                    currentDoc={props.currentDoc}
                 />
                 <SelectAllDocs
                     docs={props.docs}

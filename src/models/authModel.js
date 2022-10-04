@@ -31,6 +31,11 @@ const auth = {
         const result = await response.json();
 
         return result;
+    },
+    getUser: async function getUser(user) {
+        const response = await fetch(`${auth.baseUrl}/auth/user/${user}`);
+
+        return response;
     }
 };
 

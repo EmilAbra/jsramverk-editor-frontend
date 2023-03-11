@@ -1,8 +1,21 @@
 .editor-container {
-    max-width: 50%;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
 }
 
+.trix-editor {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 1in;
+    margin: 1rem;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    background-color: white;
+}
+#trix-toolbar-1 {
+    width: 8.5in;
+    display: flex;
+    justify-content: center;
+}
 .toolbar {
     margin: 0 auto;
     margin-bottom: 20px;
@@ -58,4 +71,13 @@ select {
 input {
     height: 28px;
     padding-left: 5px;
+}
+
+.code-mode-btn {
+    background-color: chocolate;
+    color: black;
+}
+
+.code-mode-btn:hover {
+    background-color: #DB874B;
 }

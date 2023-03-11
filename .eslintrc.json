@@ -17,13 +17,14 @@
         "react"
     ],
     "rules": {
-        "indent": [
-            2,
-            4,
-            {
-              "SwitchCase": 1
-            }
-        ],
+        "indent": "off",
+        // "indent": [
+        //     2,
+        //     4,
+        //     {
+        //       "SwitchCase": 1
+        //     }
+        // ],
         "linebreak-style": [
             2,
             "unix"

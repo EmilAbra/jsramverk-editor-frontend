@@ -1,0 +1,24 @@
+.code-result-container {
+    min-width: 600px;
+    height: 300px;
+}
+
+.exe-code-btn {
+    display: block;
+    margin: 20px;
+    background-color: #D2691E;
+    color: #000;
+}
+
+.exe-code-btn:hover {
+    background-color: #DB874B;
+}
+
+.editor-title {
+    background-color: hsl(225, 6%, 13%);
+    color: white;
+    padding: .5rem .5rem .5rem 1rem;
+    border-top-right-radius: .5rem;
+    border-top-left-radius: .5rem;
+    border-bottom: 2px solid dimgray;
+  }

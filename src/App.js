@@ -4,16 +4,15 @@ import { io } from "socket.io-client";
 
 import Home from "./components/Welcome";
 import Editor from "./components/Editor";
-import TextEditor from "./components/TextEditor";
 import Auth from "./components/LoginAuth";
-import Page3 from "./components/page3";
 import Page4 from "./components/page4";
 
 import docsModel from './models/docsModel';
 import { useState, useEffect } from 'react';
 import "./App.css";
 
-const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
+
+// const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
 
 let sendToSocket = false;
 
@@ -66,14 +65,14 @@ function App() {
     }
   }, [selectedDoc]);
 
-  useEffect(() => {
-    setSocket(io(SERVER_URL));
-    return () => {
-      if (socket) {
-          socket.disconnect();
-      }
-    };
-  }, []);
+  // useEffect(() => {
+  //   setSocket(io(SERVER_URL));
+  //   return () => {
+  //     if (socket) {
+  //         socket.disconnect();
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (socket) {
@@ -85,22 +84,24 @@ function App() {
 
   return (
     <div className="App">
-      <header className="header">
-        <Router>
-          <div className="list">
-            <ul className="ul-nav">
-              <li><Link to="/">Home</Link></li>
-              {token
-                ? <li><Link to="editor">Editor</Link></li>
-                : <li><Link to="login">Login</Link></li>
-              }
-              <li><Link to="page3">To be...</Link></li>
-              <li><Link to="page4">To be...</Link></li>
-            </ul>
-          </div>
+      <Router>
+        <header className="header">
+            <div className="list">
+              <ul className="ul-nav">
+                <li><Link to="/">Home</Link></li>
+                {token
+                  ? <li><Link to="editor">Editor</Link></li>
+                  : <li><Link to="login">Login</Link></li>
+                }
+                <li><Link to="page3">To be...</Link></li>
+                <li><Link to="page4">To be...</Link></li>
+              </ul>
+            </div>
+        </header>
+        <main>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            {token ?
+            
               <Route
                 exact path="editor"
                 element={<Editor
@@ -113,7 +114,7 @@ function App() {
                   user={user}
                 />}
               />
-              :
+
               <Route exact path="login"
                 element={<Auth
                   setToken={setToken}
@@ -121,12 +122,10 @@ function App() {
                   setUser={setUser}
                 />}
               />
-            }
-            <Route exact path="page3" element={<Page3 />} />
             <Route exact path="page4" element={<Page4 />} />
           </Routes>
-        </Router>
-      </header>
+        </main>
+      </Router>
     </div>
   );
 }

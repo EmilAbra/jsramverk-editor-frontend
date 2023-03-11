@@ -8,10 +8,14 @@ import SelectAllDocs from "./DocsAll";
 import SaveDoc from "./DocSave";
 import NewDoc from "./DocNew";
 import DocPermission from "./DocPermissions";
+import CodeEditor from "./CodeEditor";
 import { useState } from "react";
+
+
 
 export default function Editor(props) {
   const [newDoc, setNewDoc] = useState({});
+  const [codeMode, setCodeMode] = useState(false);
 
   function handleNameChange(event) {
     let newObject = {};
@@ -22,8 +26,8 @@ export default function Editor(props) {
     setNewDoc({ ...newDoc, ...newObject });
   }
 
-  function handleContentChange(html, text) {
-    let newObject = {};
+  function handleTrixEditorChange(html, text) {
+    let newObject = {codeMode: false};
 
     newObject["content"] = text;
 
@@ -31,8 +35,17 @@ export default function Editor(props) {
     setNewDoc({ ...newDoc, ...newObject });
   }
 
+  function handleCodeMirrorChange(value, viewUpdate) {
+    let newObject = {codeMode: true};
+
+    newObject["content"] = value;
+
+    props.setCurrentDoc((old) => ({ ...old, ...newObject }));
+    setNewDoc({ ...newDoc, ...newObject });
+  }
+
   return (
-    <main>
+    <div className="editor-wrapper">
       <div className="toolbar">
         <NewDoc
           setCurrentDoc={props.setCurrentDoc}
@@ -45,9 +58,13 @@ export default function Editor(props) {
           handleNameChange={handleNameChange}
           user={props.user}
         />
+        <button className="code-mode-btn" onClick={() => setCodeMode(!codeMode)}>
+          {codeMode ? 'text editor' : 'code-mode'}
+        </button>
         <DocPermission currentDoc={props.currentDoc} />
         <SelectAllDocs
           docs={props.docs}
+          codeMode={codeMode}
           setContent={props.setContent}
           setCurrentDoc={props.setCurrentDoc}
           currentDoc={props.currentDoc}
@@ -55,8 +72,12 @@ export default function Editor(props) {
         />
       </div>
       <div className="editor-container">
-        <TrixEditor onChange={handleContentChange} />
+        {codeMode ?
+          <CodeEditor onChange={handleCodeMirrorChange} />
+          :
+          <TrixEditor className="trix-editor" onChange={handleTrixEditorChange} />
+        }
       </div>
-    </main>
+    </div>
   );
 }

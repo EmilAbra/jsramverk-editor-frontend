@@ -2,22 +2,17 @@ import React from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
-import { useState, useRef } from "react";
+import { EditorView } from '@codemirror/view';
+import { useRef } from "react";
+import codeModel from '../models/codeModel';
 import './codeEditor.css';
 
-import codeModel from '../models/codeModel';
-
-export default function CodeEditor({ onChange }) {
-  const [value, setValue] = useState('');
+export default function CodeEditor({ onChange, codeMirrorValue, refs }) {
   const textareaRef = useRef();
 
-  const handleOnChange = React.useCallback((value, viewUpdate) => {
-    setValue(value);
-    onChange();
-  }, []);
-
   async function executeCode() {
-    const result = await codeModel.getCodeResult(value);
+    const result = await codeModel.getCodeResult(codeMirrorValue);
+
     textareaRef.current.value = result;
   }
 
@@ -26,11 +21,13 @@ export default function CodeEditor({ onChange }) {
       <div className="editor-title">JS</div>
       <div>
         <CodeMirror
-          onChange={handleOnChange}
+          ref={refs}
+          onChange={onChange}
+          extensions={[javascript(), EditorView.lineWrapping]}
           className="code-mirror-wrapper"
-          extensions={[javascript({ jsx: true })]}
-          height="200px"
+          height="500px"
           theme={okaidia}
+          value={codeMirrorValue}
         />
       </div>
       <button className="exe-code-btn" onClick={executeCode}>

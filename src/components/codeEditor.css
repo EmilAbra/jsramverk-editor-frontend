@@ -1,11 +1,16 @@
+.code-mirror-wrapper {
+    font-size: 20px;
+}
+
 .code-result-container {
     min-width: 600px;
     height: 300px;
+    padding: 20px;
+    font-size: 20px;
 }
 
 .exe-code-btn {
-    display: block;
-    margin: 20px;
+    margin: 20px auto;
     background-color: #D2691E;
     color: #000;
 }
@@ -21,4 +26,8 @@
     border-top-right-radius: .5rem;
     border-top-left-radius: .5rem;
     border-bottom: 2px solid dimgray;
-  }
+}
+
+.cm-content {
+    white-space: pre-wrap;
+}

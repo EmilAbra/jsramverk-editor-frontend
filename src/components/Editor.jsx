@@ -82,16 +82,26 @@ export default function Editor(props) {
   return (
     <div className="editor-wrapper">
       <div className="toolbar">
-        <NewDoc
-          setCurrentDoc={props.setCurrentDoc}
-          setContent={props.setContent}
-        />
         <SaveDoc
           newDoc={newDoc}
           currentDoc={props.currentDoc}
           setAlldocs={props.setAlldocs}
           handleNameChange={handleNameChange}
           user={props.user}
+        />
+        <DocPermission
+          currentDoc={props.currentDoc}
+          setCurrentDoc={props.setCurrentDoc}
+        />
+        <DocSendPermission 
+          currentDoc={props.currentDoc}
+          setCurrentDoc={props.setCurrentDoc}
+        />
+      </div>
+      <div className="toolbar">
+        <NewDoc
+          setCurrentDoc={props.setCurrentDoc}
+          setContent={props.setContent}
         />
         <button onClick={handleDocToPdf}>
           Export as PDF
@@ -102,13 +112,6 @@ export default function Editor(props) {
         <button onClick={handleAddComment}>
           Comment
         </button>
-        <DocPermission
-          currentDoc={props.currentDoc}
-        />
-        <DocSendPermission 
-          currentDoc={props.currentDoc}
-          user={props.user}
-        />
         <SelectAllDocs
           docs={props.docs}
           codeMode={codeMode}

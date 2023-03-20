@@ -13,22 +13,23 @@ export default function SelectAllDocs(props) {
       props.setContent(doc.content, true);
     }
   }
-  
+
   let docsToSelect;
-  if (props.codeMode) {
+
+  if (props.codeMode && props.docs) {
     docsToSelect = props.docs.filter(doc => doc.codeMode === true)
       .map((doc, index) => {
         <option value={doc.name} key={index}>
           {doc.name}
-        </option>
-      })
-  } else {
+        </option>;
+      });
+  } else if (!props.codeMode && props.docs) {
     docsToSelect = props.docs.filter(doc => doc.codeMode === false)
       .map((doc, index) => {
         <option value={doc.name} key={index}>
           {doc.name}
-        </option>
-      })
+        </option>;
+      });
   }
 
   return (
@@ -39,13 +40,13 @@ export default function SelectAllDocs(props) {
           Choose a document
         </option>
         {docsToSelect}
-        {/* {props.docs
+        {props.docs
           ? props.docs.map((doc, index) => (
               <option value={doc.name} key={index}>
                 {doc.name}
               </option>
             ))
-          : ""} */}
+          : ""}
       </select>
     </div>
   );

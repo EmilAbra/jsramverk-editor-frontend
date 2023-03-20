@@ -14,7 +14,9 @@ export default function DocPermission(props) {
         alert("Permission already exist.");
         return;
       }
-      props.currentDoc.allowed_users.push(userName);
+      props.setCurrentDoc((prev) => {
+        return {...prev, allowed_users: [...prev.allowed_users, userName]}
+      })
       const result = await docsModel.updateDoc(props.currentDoc);
 
       if (result.status === 204) {

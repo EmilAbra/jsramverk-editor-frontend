@@ -3,7 +3,6 @@
  */
 
 const docs = {
-  // baseUrl: 'http://localhost:1337',
   baseUrl: window.location.href.includes("localhost")
     ? "http://localhost:1337"
     : "https://jsramverk-editor-emab21.azurewebsites.net",

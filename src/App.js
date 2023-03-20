@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Link, Routes}
   from "react-router-dom";
 import { io } from "socket.io-client";
@@ -33,6 +34,7 @@ function App() {
 
     setDocs(allDocs);
   }
+  console.log(docs);
 
   function setEditorContent(content, triggerChange) {
     let element = document.querySelector("trix-editor");
@@ -44,13 +46,19 @@ function App() {
     element.editor.insertHTML(content);
   }
 
+  // useEffect(() => {
+  //   if (token) {
+  //     (async () => {
+  //       await fetchDocs();
+  //     })();
+  //   }
+  // }, [token]);
+
   useEffect(() => {
-    if (token) {
       (async () => {
         await fetchDocs();
       })();
-    }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     if (socket && sendToSocket) {

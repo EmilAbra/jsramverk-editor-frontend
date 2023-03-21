@@ -1,12 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Routes}
+import { BrowserRouter as Router, Route, Routes}
   from "react-router-dom";
 import { io } from "socket.io-client";
 
-import Home from "./components/Welcome";
 import Editor from "./components/Editor";
-import Auth from "./components/LoginAuth";
-import Page4 from "./components/page4";
+import LoginAuth from "./components/LoginAuth";
 
 import docsModel from './models/docsModel';
 import { useState, useEffect } from 'react';
@@ -46,19 +44,19 @@ function App() {
     element.editor.insertHTML(content);
   }
 
-  // useEffect(() => {
-  //   if (token) {
-  //     (async () => {
-  //       await fetchDocs();
-  //     })();
-  //   }
-  // }, [token]);
-
   useEffect(() => {
+    if (token) {
       (async () => {
         await fetchDocs();
       })();
-  }, []);
+    }
+  }, [token]);
+
+  // useEffect(() => {
+  //     (async () => {
+  //       await fetchDocs();
+  //     })();
+  // }, []);
 
   useEffect(() => {
     if (socket && sendToSocket) {
@@ -93,25 +91,11 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <header className="header">
-            <div className="list">
-              <ul className="ul-nav">
-                <li><Link to="/">Home</Link></li>
-                {token
-                  ? <li><Link to="editor">Editor</Link></li>
-                  : <li><Link to="login">Login</Link></li>
-                }
-                <li><Link to="page3">To be...</Link></li>
-                <li><Link to="page4">To be...</Link></li>
-              </ul>
-            </div>
-        </header>
         <main>
           <Routes>
-            <Route exact path="/" element={<Home />} />
-            
+            {token ?
               <Route
-                exact path="editor"
+                exact path="/editor"
                 element={<Editor
                   setSelectedDoc={setSelectedDoc}
                   docs={docs}
@@ -122,15 +106,16 @@ function App() {
                   user={user}
                 />}
               />
-
-              <Route exact path="login"
-                element={<Auth
+            :
+              <Route exact path="/login"
+                element={<LoginAuth
+                  token={token}
                   setToken={setToken}
                   user={user}
                   setUser={setUser}
                 />}
               />
-            <Route exact path="page4" element={<Page4 />} />
+            }
           </Routes>
         </main>
       </Router>

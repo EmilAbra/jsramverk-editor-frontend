@@ -46,6 +46,7 @@ export default function Login({ setToken, user, setUser }) {
           name="email"
           id="username"
           onChange={changeHandler}
+          required
         />
         <label htmlFor="password">Password</label>
         <input
@@ -55,6 +56,7 @@ export default function Login({ setToken, user, setUser }) {
           name="password"
           id="password"
           onChange={changeHandler}
+          required
         />
         <div className="form-button-container">
           <button className="register-button" onClick={register}>

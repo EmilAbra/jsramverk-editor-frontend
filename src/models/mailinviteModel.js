@@ -9,7 +9,7 @@ const mail = {
     sendMail: async function sendMail(toMailAddress) {
         var data = {
             toMailAddress: toMailAddress,
-            urlAdress: `${mail.baseUrl}/editor`
+            urlAdress: `${mail.baseUrl}/`
         };
         let response = await fetch(`${mail.baseUrl}/editor/mail_invite`, {
             body: JSON.stringify(data),

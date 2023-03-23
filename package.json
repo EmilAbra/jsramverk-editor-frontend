@@ -2,7 +2,7 @@
   "name": "jsramverk-editor",
   "version": "5.0.3",
   "private": true,
-  "homepage": "http://.",
+  "homepage": "http://./login",
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.4",
     "@emotion/react": "^11.10.4",

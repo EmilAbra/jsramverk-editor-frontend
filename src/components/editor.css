@@ -22,7 +22,9 @@ trix-toolbar .trix-button {
     margin: 1rem;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
     background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 #trix-toolbar-1 {
     width: 8.5in;
     display: flex;
@@ -63,8 +65,7 @@ button {
     white-space: nowrap;
 }
 
-button:hover,
-button:focus {
+button:hover {
     background-color: #07c;
 }
 

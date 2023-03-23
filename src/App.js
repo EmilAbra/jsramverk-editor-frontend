@@ -20,28 +20,39 @@ function changeSendToSocket(value) {
 }
 
 function App() {
+  const [newDoc, setNewDoc] = useState({});
   const [docs, setDocs] = useState([]);
   const [currentDoc, setCurrentDoc] = useState({});
   const [socket, setSocket] = useState(null);
-  const [selectedDoc, setSelectedDoc] = useState({});
+  const [ioSelectedDoc, setIoSelectedDoc] = useState({});
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
+  const [codeMode, setCodeMode] = useState(false);
 
   async function fetchDocs() {
     const allDocs = await docsModel.getAllDocs(token, user);
 
     setDocs(allDocs);
   }
-  console.log(docs);
 
   function setEditorContent(content, triggerChange) {
-    let element = document.querySelector("trix-editor");
+    if (codeMode) {
+      let newObject = {codeMode: true};
 
-    changeSendToSocket(triggerChange);
-    element.value = "";
-    element.editor.setSelectedRange([0, 0]);
-    changeSendToSocket(triggerChange);
-    element.editor.insertHTML(content);
+      newObject["content"] = content;
+      changeSendToSocket(triggerChange);
+      setCurrentDoc((old) => ({ ...old, ...newObject }));
+      setNewDoc({ ...newDoc, ...newObject });
+      changeSendToSocket(triggerChange);
+    } else {
+      let element = document.querySelector("trix-editor");
+
+      changeSendToSocket(triggerChange);
+      element.value = "";
+      element.editor.setSelectedRange([0, 0]);
+      changeSendToSocket(triggerChange);
+      element.editor.insertHTML(content);
+    }   
   }
 
   useEffect(() => {
@@ -67,9 +78,9 @@ function App() {
 
   useEffect(() => {
     if (socket) {
-      socket.emit("create", selectedDoc._id);
+      socket.emit("create", ioSelectedDoc._id);
     }
-  }, [selectedDoc]);
+  }, [ioSelectedDoc]);
 
   // useEffect(() => {
   //   setSocket(io(SERVER_URL));
@@ -97,13 +108,18 @@ function App() {
               <Route
                 exact path="/editor"
                 element={<Editor
-                  setSelectedDoc={setSelectedDoc}
+                  newDoc={newDoc}
+                  setNewDoc={setNewDoc}
+                  codeMode={codeMode}
+                  setCodeMode={setCodeMode}
+                  setIoSelectedDoc={setIoSelectedDoc}
                   docs={docs}
                   setAlldocs={fetchDocs}
                   setCurrentDoc={setCurrentDoc}
-                  setContent={setEditorContent}
+                  setEditorContent={setEditorContent}
                   currentDoc={currentDoc}
                   user={user}
+                  token={token}
                 />}
               />
             :

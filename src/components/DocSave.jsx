@@ -2,23 +2,32 @@ import React from "react";
 import docsModel from "../models/docsModel";
 
 export default function SaveDoc(props) {
+  const {
+    newDoc,
+    currentDoc,
+    setAlldocs,
+    handleNameChange,
+    user,
+    token
+  } = props;
+
   async function saveDoc() {
-    const doc = await docsModel.getDoc(props.currentDoc.name);
+    const doc = await docsModel.getDoc(currentDoc.name, token);
 
     if (doc) {
-      const result = await docsModel.updateDoc(props.currentDoc);
+      const result = await docsModel.updateDoc(currentDoc);
 
       if (result.status === 204) {
         alert(`Document ${doc.name} was saved.`);
       }
     } else {
-      const result = await docsModel.saveDoc(props.newDoc, props.user);
+      const result = await docsModel.saveDoc(newDoc, user);
 
       if (result.status === 201) {
-        alert(`Document was saved as ${props.newDoc.name}.`);
+        alert(`Document was saved as ${newDoc.name}.`);
       }
     }
-    props.setAlldocs();
+    setAlldocs();
   }
 
   return (
@@ -31,8 +40,8 @@ export default function SaveDoc(props) {
         minLength={3}
         maxLength={20}
         name="name"
-        value={props.currentDoc.name || ""}
-        onChange={props.handleNameChange}
+        value={currentDoc.name || ""}
+        onChange={handleNameChange}
       />
       <button onClick={saveDoc}>Save</button>
     </div>

@@ -1,25 +1,43 @@
 import React from 'react';
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import "trix";
 import "trix/dist/trix.css";
 import { TrixEditor } from "react-trix";
 import "./editor.css";
 import "../index.css";
-import SelectAllDocs from "./DocsAll";
+import SelectAllDocs from "./DocSelect";
 import SaveDoc from "./DocSave";
 import NewDoc from "./DocNew";
-import DocPermission from "./DocPermissions";
+import DocAddPermission from "./DocAddPermission";
 import DocSendPermission from "./DocSendPermission";
 import CodeEditor from "./CodeEditor";
 import Trix from 'trix';
 import html2pdf from "html2pdf.js";
 
-
+// import { useNavigate } from "react-router-dom";
 
 export default function Editor(props) {
-  const [newDoc, setNewDoc] = useState({});
-  const [codeMode, setCodeMode] = useState(false);
+                    
   const refs = useRef({});
+  const {
+    newDoc,
+    setNewDoc,
+    codeMode,
+    setCodeMode,
+    currentDoc,
+    setCurrentDoc,
+    setIoSelectedDoc,
+    setAlldocs,
+    setEditorContent,
+    user,
+    docs,
+    token,
+  } = props;
+  // const navigate = useNavigate();
+
+  // if (!token) {
+  //   navigate("/login");
+  // }
 
   useEffect(() => {
     if (refs.current?.view) {console.log('EditorView:', refs.current?.view);}
@@ -32,7 +50,7 @@ export default function Editor(props) {
 
     newObject["name"] = event.target.value;
 
-    props.setCurrentDoc((old) => ({ ...old, ...newObject }));
+    setCurrentDoc((old) => ({ ...old, ...newObject }));
     setNewDoc({ ...newDoc, ...newObject });
   }
 
@@ -41,7 +59,7 @@ export default function Editor(props) {
 
     newObject["content"] = text;
 
-    props.setCurrentDoc((old) => ({ ...old, ...newObject }));
+    setCurrentDoc((old) => ({ ...old, ...newObject }));
     setNewDoc({ ...newDoc, ...newObject });
   }
 
@@ -50,8 +68,13 @@ export default function Editor(props) {
 
     newObject["content"] = value;
 
-    props.setCurrentDoc((old) => ({ ...old, ...newObject }));
+    setCurrentDoc((old) => ({ ...old, ...newObject }));
     setNewDoc({ ...newDoc, ...newObject });
+  }
+
+  function handleEditorShift() {
+    setCodeMode(!codeMode);
+    setNewDoc({});
   }
 
   function handleDocToPdf() {
@@ -84,41 +107,42 @@ export default function Editor(props) {
       <div className="toolbar">
         <SaveDoc
           newDoc={newDoc}
-          currentDoc={props.currentDoc}
-          setAlldocs={props.setAlldocs}
+          currentDoc={currentDoc}
+          setAlldocs={setAlldocs}
           handleNameChange={handleNameChange}
-          user={props.user}
+          user={user}
+          token={token}
         />
-        <DocPermission
-          currentDoc={props.currentDoc}
-          setCurrentDoc={props.setCurrentDoc}
+        <DocAddPermission
+          currentDoc={currentDoc}
+          setCurrentDoc={setCurrentDoc}
         />
-        <DocSendPermission 
-          currentDoc={props.currentDoc}
-          setCurrentDoc={props.setCurrentDoc}
+        <DocSendPermission
+          currentDoc={currentDoc}
+          setCurrentDoc={setCurrentDoc}
         />
       </div>
       <div className="toolbar">
         <NewDoc
-          setCurrentDoc={props.setCurrentDoc}
-          setContent={props.setContent}
+          setCurrentDoc={setCurrentDoc}
+          setEditorContent={setEditorContent}
         />
         <button onClick={handleDocToPdf}>
           Export as PDF
         </button>
-        <button className="code-mode-btn" onClick={() => setCodeMode(!codeMode)}>
+        <button className="code-mode-btn" onClick={handleEditorShift}>
           {codeMode ? 'Text editor' : 'Code-mode'}
         </button>
         <button onClick={handleAddComment}>
           Comment
         </button>
         <SelectAllDocs
-          docs={props.docs}
+          docs={docs}
           codeMode={codeMode}
-          setContent={props.setContent}
-          setCurrentDoc={props.setCurrentDoc}
-          currentDoc={props.currentDoc}
-          setSelectedDoc={props.setSelectedDoc}
+          setEditorContent={setEditorContent}
+          setCurrentDoc={setCurrentDoc}
+          setIoSelectedDoc={setIoSelectedDoc}
+          token={token}
         />
       </div>
       <div className={codeMode ? "code-editor-container" : "editor-container"}>

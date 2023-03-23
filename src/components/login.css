@@ -22,6 +22,7 @@
 }
 
 .auth-container {
+    background-color: #fff;
     max-width: 25%;
     margin: 0 auto;
     border: 2px solid silver;

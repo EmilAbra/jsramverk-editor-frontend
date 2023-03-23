@@ -8,7 +8,7 @@ const initialState = {
 export default function NewDoc(props) {
   function resetState() {
     props.setCurrentDoc(initialState);
-    props.setContent("");
+    props.setEditorContent("");
   }
 
   return (

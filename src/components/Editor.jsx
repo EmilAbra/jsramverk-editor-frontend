@@ -82,7 +82,7 @@ export default function Editor(props) {
     const margin = codeMode ? 0 : [72, 72, 72, 72];
     const element = codeMode ? codeMirrorRef.current.editor
       : document.querySelector("trix-editor").innerHTML;
-    var opt = {
+    const opt = {
       margin: margin,
       filename: 'my_doc.pdf',
       image: { type: 'jpeg', quality: 0.98 },

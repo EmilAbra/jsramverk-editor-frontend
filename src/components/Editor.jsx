@@ -1,25 +1,27 @@
-import React from 'react';
-import { useEffect, useRef, useState } from "react";
-import "trix";
-import "trix/dist/trix.css";
-import { TrixEditor } from "react-trix";
-import "./editor.css";
+import React, { useRef, useState } from 'react';
 import "../index.css";
+import "./editor.css";
+
 import SelectAllDocs from "./DocSelect";
 import SaveDoc from "./DocSave";
 import NewDoc from "./DocNew";
 import DocAddPermission from "./DocAddPermission";
 import DocSendPermission from "./DocSendPermission";
+import EditorShiftBtn from './EditorShiftBtn';
+import DocToPdfBtn from "./DocToPdfBtn";
+import CommentAddBtn from "./CommentAddBtn";
 import CodeEditor from "./CodeEditor";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import html2pdf from "html2pdf.js";
+import TextEditor from './TextEditor';
+
 
 export default function Editor(props) {
   const [trixSelectedRange, setTrixSelectedRange] = useState([]);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const trixEditorRef = useRef();
   const codeMirrorRef = useRef({});
+  
   const {
     codeMode,
     handleCodeModeToggle,
@@ -33,92 +35,56 @@ export default function Editor(props) {
     token,
   } = props;
 
+  let trixEditor;
+  if (trixEditorRef.current) {
+    trixEditor = trixEditorRef.current.editor;
+  }
+
   const handleShowCommentFormToggle = () => {
     setShowCommentForm((current) => !current);
   };
 
-  useEffect(() => {
-    if (codeMirrorRef.current?.view) {
-      console.log('EditorView:', codeMirrorRef.current?.view);
-    }
-    if (codeMirrorRef.current?.state) {
-      console.log('EditorState:', codeMirrorRef.current?.state);
-    }
-    if (codeMirrorRef.current?.editor) {
-      console.log('HTMLDivElement:', codeMirrorRef.current?.editor);
-    }
-  }, [codeMirrorRef.current]);
+  // useEffect(() => {
+  //   if (codeMirrorRef.current?.view) {
+  //     console.log('EditorView:', codeMirrorRef.current?.view);
+  //   }
+  //   if (codeMirrorRef.current?.state) {
+  //     console.log('EditorState:', codeMirrorRef.current?.state);
+  //   }
+  //   if (codeMirrorRef.current?.editor) {
+  //     console.log('HTMLDivElement:', codeMirrorRef.current?.editor);
+  //   }
+  // }, [codeMirrorRef.current]);
 
-  function handleNameChange(event) {
-    let newObject = {};
-
-    newObject["name"] = event.target.value;
-
-    setCurrentDoc((old) => ({ ...old, ...newObject }));
+  function setTrixEditorSelection(currentRange) {
+    trixEditor.setSelectedRange(currentRange);
   }
 
-  function handleTrixEditorChange(text) {
-    let newObject = {codeMode: false};
-
-    newObject["content"] = text;
-
-    setCurrentDoc((old) => ({ ...old, ...newObject }));
-  }
-
-  function handleCodeMirrorChange(value) {
-    let newObject = {codeMode: true};
-
-    newObject["content"] = value;
-
-    setCurrentDoc((old) => ({ ...old, ...newObject }));
-  }
-
-  function handleEditorShift() {
-    setCurrentDoc({});
-    handleCodeModeToggle();
-  }
-
-  function handleDocToPdf() {
-    const margin = codeMode ? 0 : [72, 72, 72, 72];
-    const element = codeMode ? codeMirrorRef.current.editor
-      : document.querySelector("trix-editor").innerHTML;
-    const opt = {
-      margin: margin,
-      filename: 'my_doc.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(element).save();
-  }
-
-  function handleAddComment() {
-    const trixEditor = trixEditorRef.current.editor;
-    console.log(trixEditor);
-    const range = trixEditor.getSelectedRange();
-    if (range[0] === range[1]) {
-      alert("You must select a line of text to comment on");
-      return;
-    }
-
-    setTrixSelectedRange(range);
-    trixEditor.activateAttribute("backgroundColor", "#FBCEB1");
-
+  function setTrixEditorSelectionToEnd() {
     const docLength = trixEditor.getDocument().toString().length;
 
-    trixEditor.setSelectedRange(docLength - 1);
+    setTrixEditorSelection(docLength - 1);
+  }
+
+  function setTrixEditorTextBackground(color) {
+    trixEditor.activateAttribute("backgroundColor", color);
+  }
+
+  function unsetTrixEditorTextBackground() {
     trixEditor.deactivateAttribute("backgroundColor");
-    handleShowCommentFormToggle();
+  }
+
+  function trixEditorSelectedRange() {
+    return trixEditor.getSelectedRange();
   }
 
   return (
     <div className="editor-wrapper">
       <div className="toolbar">
         <SaveDoc
+          setCurrentDoc={setCurrentDoc}
           currentDoc={currentDoc}
           setAlldocs={setAlldocs}
-          handleNameChange={handleNameChange}
           user={user}
           token={token}
         />
@@ -136,16 +102,24 @@ export default function Editor(props) {
           setCurrentDoc={setCurrentDoc}
           setEditorContent={setEditorContent}
         />
-        <button onClick={handleDocToPdf}>
-          Export as PDF
-        </button>
-        <button className="code-mode-btn" onClick={handleEditorShift}>
-          {codeMode ? 'Text editor' : 'Code-mode'}
-        </button>
+        <DocToPdfBtn
+          codeMode={codeMode}
+          codeMirrorRef={codeMirrorRef}
+        />
+        <EditorShiftBtn
+          codeMode={codeMode}
+          setCurrentDoc={setCurrentDoc}
+          handleCodeModeToggle={handleCodeModeToggle}
+        />
         {!codeMode &&
-          <button onClick={handleAddComment}>
-          Comment
-          </button>
+          <CommentAddBtn
+            trixEditorSelectedRange={trixEditorSelectedRange}
+            setTrixSelectedRange={setTrixSelectedRange}
+            setTrixEditorTextBackground={setTrixEditorTextBackground}
+            setTrixEditorSelectionToEnd={setTrixEditorSelectionToEnd}
+            unsetTrixEditorTextBackground={unsetTrixEditorTextBackground}
+            handleShowCommentFormToggle={handleShowCommentFormToggle}
+          />
         }
         <SelectAllDocs
           docs={docs}
@@ -160,16 +134,13 @@ export default function Editor(props) {
         <div className={codeMode ? "code-editor-container" : "trix-editor-container"}>
           {codeMode ?
             <CodeEditor
-              className="code-mirror"
-              onChange={handleCodeMirrorChange}
-              codeMirrorValue={currentDoc.content}
+              setCurrentDoc={setCurrentDoc}
               codeMirrorRef={codeMirrorRef}
             />
             :
-            <TrixEditor
-              ref={trixEditorRef}
-              className="trix-editor"
-              onChange={handleTrixEditorChange}
+            <TextEditor
+              trixEditorRef={trixEditorRef}
+              setCurrentDoc={setCurrentDoc}
             />
           }
         </div>
@@ -183,8 +154,11 @@ export default function Editor(props) {
                 content={comment.content}
                 user={user}
                 range={comment.range}
-                trixEditor={trixEditorRef.current.editor}
                 setCurrentDoc={setCurrentDoc}
+                setTrixEditorSelection={setTrixEditorSelection}
+                setTrixEditorSelectionToEnd={setTrixEditorSelectionToEnd}
+                setTrixEditorTextBackground={setTrixEditorTextBackground}
+                unsetTrixEditorTextBackground={unsetTrixEditorTextBackground}
               />);
             })
           }
@@ -194,9 +168,11 @@ export default function Editor(props) {
               trixSelectedRange={trixSelectedRange}
               handleShowCommentFormToggle={handleShowCommentFormToggle}
               user={user}
-              trixEditor={trixEditorRef.current.editor}
               setCurrentDoc={setCurrentDoc}
               currentDoc={currentDoc}
+              unsetTrixEditorTextBackground={unsetTrixEditorTextBackground}
+              setTrixEditorSelection={setTrixEditorSelection}
+              setTrixEditorSelectionToEnd={setTrixEditorSelectionToEnd}
             />
           }
         </div>

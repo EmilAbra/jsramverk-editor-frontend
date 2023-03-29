@@ -28,9 +28,9 @@ function App() {
   const [user, setUser] = useState({});
   const [codeMode, setCodeMode] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(currentDoc);
-  // }, [currentDoc]);
+  useEffect(() => {
+    console.log(currentDoc);
+  }, [currentDoc]);
 
   useEffect(() => {
     if (token) {

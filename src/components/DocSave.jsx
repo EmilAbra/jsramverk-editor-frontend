@@ -4,8 +4,8 @@ import docsModel from "../models/docsModel";
 export default function SaveDoc(props) {
   const {
     currentDoc,
+    setCurrentDoc,
     setAlldocs,
-    handleNameChange,
     user,
     token
   } = props;
@@ -29,6 +29,14 @@ export default function SaveDoc(props) {
     setAlldocs();
   }
 
+  function handleChange(event) {
+    let newObject = {};
+
+    newObject["name"] = event.target.value;
+
+    setCurrentDoc((old) => ({ ...old, ...newObject }));
+  }
+
   return (
     <div>
       <label htmlFor="name">Name: </label>
@@ -40,7 +48,7 @@ export default function SaveDoc(props) {
         maxLength={20}
         name="name"
         value={currentDoc.name || ""}
-        onChange={handleNameChange}
+        onChange={handleChange}
       />
       <button onClick={saveDoc}>Save</button>
     </div>

@@ -12,8 +12,11 @@ export default function Comment(props) {
     content,
     user,
     range,
-    trixEditor,
-    setCurrentDoc
+    setCurrentDoc,
+    setTrixEditorSelection,
+    setTrixEditorSelectionToEnd,
+    setTrixEditorTextBackground,
+    unsetTrixEditorTextBackground
   } = props;
 
   const handleCanClickOnCommentToggle = () => {
@@ -24,26 +27,18 @@ export default function Comment(props) {
     setShowEditComment((current) => !current);
   };
 
-  function setTrixEditorRange(currentRange) {
-    trixEditor.setSelectedRange(currentRange);
-  }
-
   function handleCommentClick() {
     handleCanClickOnCommentToggle();
     handleShowEditCommentToggle();
-
-    setTrixEditorRange(range);
-    trixEditor.activateAttribute("backgroundColor", "#FF7F50");
-    setTrixEditorRange(range[0]);
+    setTrixEditorSelection(range);
+    setTrixEditorTextBackground("#FF7F50");
+    setTrixEditorSelection(range[0]);
   }
 
   function handleDeleteComment() {
-    setTrixEditorRange(range);
-    trixEditor.deactivateAttribute("backgroundColor");
-
-    const docLength = trixEditor.getDocument().toString().length;
-
-    setTrixEditorRange(docLength - 1);
+    setTrixEditorSelection(range);
+    unsetTrixEditorTextBackground();
+    setTrixEditorSelectionToEnd();
 
     setCurrentDoc(prevState => ({
       comments: prevState.comments.filter(
@@ -66,18 +61,13 @@ export default function Comment(props) {
         )
       })
     );
-
     handleEditCommentExit();
   }
 
   function handleEditCommentExit() {
-    setTrixEditorRange(range);
-    trixEditor.activateAttribute("backgroundColor", "#FBCEB1");
-
-    const docLength = trixEditor.getDocument().toString().length;
-
-    setTrixEditorRange(docLength - 1);
-
+    setTrixEditorSelection(range);
+    setTrixEditorTextBackground("#FBCEB1");
+    setTrixEditorSelectionToEnd();
     handleShowEditCommentToggle();
     handleCanClickOnCommentToggle();
   }

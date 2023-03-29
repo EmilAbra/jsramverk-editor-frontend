@@ -6,20 +6,20 @@ import "./commentForm.css";
 export default function CommentForm(props) {
   const [commentContent, setCommentContent] = useState("");
   const {
-    trixEditor,
     user,
     trixSelectedRange,
     handleShowCommentFormToggle,
     currentDoc,
     setCurrentDoc,
+    unsetTrixEditorTextBackground,
+    setTrixEditorSelection,
+    setTrixEditorSelectionToEnd
   } = props;
 
   function handleCancelComment() {
-    trixEditor.setSelectedRange(trixSelectedRange);
-    trixEditor.deactivateAttribute("backgroundColor");
-    const docLength = trixEditor.getDocument().toString().length;
-
-    trixEditor.setSelectedRange(docLength - 1);
+    setTrixEditorSelection(trixSelectedRange);
+    unsetTrixEditorTextBackground();
+    setTrixEditorSelectionToEnd();
     handleShowCommentFormToggle();
   }
 
@@ -60,10 +60,11 @@ export default function CommentForm(props) {
 
   return (
     <OutsideAlerter
-      trixEditor={trixEditor}
       handleShowDivToggle={handleShowCommentFormToggle}
       trixSelectedRange={trixSelectedRange}
-      element={"comment-form"}
+      unsetTrixEditorTextBackground={unsetTrixEditorTextBackground}
+      setTrixEditorSelection={setTrixEditorSelection}
+      setTrixEditorSelectionToEnd={setTrixEditorSelectionToEnd}
     >
       <div className='comment-form-container'>
         <form onSubmit={handleSubmitComment}>

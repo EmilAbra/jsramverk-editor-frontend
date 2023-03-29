@@ -6,9 +6,11 @@ import PropTypes from "prop-types";
  */
 function useOutsideAlerter(ref, props) {
   const {
-    trixEditor,
     handleShowDivToggle,
     trixSelectedRange,
+    unsetTrixEditorTextBackground,
+    setTrixEditorSelection,
+    setTrixEditorSelectionToEnd
   } = props;
 
   useEffect(() => {
@@ -18,12 +20,9 @@ function useOutsideAlerter(ref, props) {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         handleShowDivToggle();
-        trixEditor.setSelectedRange(trixSelectedRange);
-        trixEditor.deactivateAttribute("backgroundColor");
-
-        const docLength = trixEditor.getDocument().toString().length;
-
-        trixEditor.setSelectedRange(docLength - 1);
+        setTrixEditorSelection(trixSelectedRange);
+        unsetTrixEditorTextBackground();
+        setTrixEditorSelectionToEnd();
       }
     }
     // Bind the event listener

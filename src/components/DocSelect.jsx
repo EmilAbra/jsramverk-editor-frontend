@@ -44,7 +44,6 @@ export default function SelectAllDocs(props) {
 
   return (
     <div className="select-doc">
-      <label htmlFor="selectOne">Select: </label>
       <select onChange={fetchDoc} id="selectOne">
         <option value="-99" key="0" defaultValue>
           Choose a document

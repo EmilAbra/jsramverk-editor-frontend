@@ -3,7 +3,6 @@ import docsModel from "../models/docsModel";
 
 export default function SaveDoc(props) {
   const {
-    newDoc,
     currentDoc,
     setAlldocs,
     handleNameChange,
@@ -21,17 +20,17 @@ export default function SaveDoc(props) {
         alert(`Document ${doc.name} was saved.`);
       }
     } else {
-      const result = await docsModel.saveDoc(newDoc, user);
+      const result = await docsModel.saveDoc(currentDoc, user);
 
       if (result.status === 201) {
-        alert(`Document was saved as ${newDoc.name}.`);
+        alert(`Document was saved as ${currentDoc.name}.`);
       }
     }
     setAlldocs();
   }
 
   return (
-    <div className="save-doc">
+    <div>
       <label htmlFor="name">Name: </label>
       <input
         id="name"

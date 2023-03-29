@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes}
   from "react-router-dom";
 import { io } from "socket.io-client";
-
+import Trix from 'trix';
 import Editor from "./components/Editor";
 import LoginAuth from "./components/LoginAuth";
 
@@ -20,7 +20,6 @@ function changeSendToSocket(value) {
 }
 
 function App() {
-  const [newDoc, setNewDoc] = useState({});
   const [docs, setDocs] = useState([]);
   const [currentDoc, setCurrentDoc] = useState({});
   const [socket, setSocket] = useState(null);
@@ -29,31 +28,9 @@ function App() {
   const [user, setUser] = useState({});
   const [codeMode, setCodeMode] = useState(false);
 
-  async function fetchDocs() {
-    const allDocs = await docsModel.getAllDocs(token, user);
-
-    setDocs(allDocs);
-  }
-
-  function setEditorContent(content, triggerChange) {
-    if (codeMode) {
-      let newObject = {codeMode: true};
-
-      newObject["content"] = content;
-      changeSendToSocket(triggerChange);
-      setCurrentDoc((old) => ({ ...old, ...newObject }));
-      setNewDoc({ ...newDoc, ...newObject });
-      changeSendToSocket(triggerChange);
-    } else {
-      let element = document.querySelector("trix-editor");
-
-      changeSendToSocket(triggerChange);
-      element.value = "";
-      element.editor.setSelectedRange([0, 0]);
-      changeSendToSocket(triggerChange);
-      element.editor.insertHTML(content);
-    }   
-  }
+  // useEffect(() => {
+  //   console.log(currentDoc);
+  // }, [currentDoc]);
 
   useEffect(() => {
     if (token) {
@@ -62,6 +39,13 @@ function App() {
       })();
     }
   }, [token]);
+
+  useEffect(() => {
+    Trix.config.textAttributes.backgroundColor = {
+      styleProperty: "background-color",
+      inheritable: 1
+    };
+  }, []);
 
   // useEffect(() => {
   //     (async () => {
@@ -99,6 +83,35 @@ function App() {
     }
   }, [socket]);
 
+  async function fetchDocs() {
+    const allDocs = await docsModel.getAllDocs(token, user);
+
+    setDocs(allDocs);
+  }
+
+  const handleCodeModeToggle = () => {
+    setCodeMode((current) => !current);
+  };
+
+  function setEditorContent(content, triggerChange) {
+    if (codeMode) {
+      let newObject = {codeMode: true};
+
+      newObject["content"] = content;
+      changeSendToSocket(triggerChange);
+      setCurrentDoc((old) => ({ ...old, ...newObject }));
+      changeSendToSocket(triggerChange);
+    } else {
+      let element = document.querySelector("trix-editor");
+
+      changeSendToSocket(triggerChange);
+      element.value = "";
+      element.editor.setSelectedRange([0, 0]);
+      changeSendToSocket(triggerChange);
+      element.editor.insertHTML(content);
+    }
+  }
+
   return (
     <div className="App">
       <Router>
@@ -108,17 +121,15 @@ function App() {
               <Route
                 exact path="/editor"
                 element={<Editor
-                  newDoc={newDoc}
-                  setNewDoc={setNewDoc}
                   codeMode={codeMode}
-                  setCodeMode={setCodeMode}
+                  handleCodeModeToggle={handleCodeModeToggle}
                   setIoSelectedDoc={setIoSelectedDoc}
                   docs={docs}
                   setAlldocs={fetchDocs}
                   setCurrentDoc={setCurrentDoc}
                   setEditorContent={setEditorContent}
                   currentDoc={currentDoc}
-                  user={user}
+                  user={user.email}
                   token={token}
                 />}
               />

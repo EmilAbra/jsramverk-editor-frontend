@@ -12,7 +12,7 @@ export default function NewDoc(props) {
   }
 
   return (
-    <div className="new-doc">
+    <div>
       <button onClick={resetState}>New document</button>
     </div>
   );

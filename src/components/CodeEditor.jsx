@@ -7,7 +7,7 @@ import { useRef } from "react";
 import codeModel from '../models/codeModel';
 import './codeEditor.css';
 
-export default function CodeEditor({ onChange, codeMirrorValue, refs }) {
+export default function CodeEditor({ onChange, codeMirrorValue, codeMirrorRef }) {
   const textareaRef = useRef();
 
   async function executeCode() {
@@ -21,7 +21,7 @@ export default function CodeEditor({ onChange, codeMirrorValue, refs }) {
       <div className="editor-title">JS</div>
       <div>
         <CodeMirror
-          ref={refs}
+          ref={codeMirrorRef}
           onChange={onChange}
           extensions={[javascript(), EditorView.lineWrapping]}
           className="code-mirror-wrapper"

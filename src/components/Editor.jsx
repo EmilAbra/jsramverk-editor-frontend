@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "trix";
 import "trix/dist/trix.css";
 import { TrixEditor } from "react-trix";
@@ -11,19 +11,18 @@ import NewDoc from "./DocNew";
 import DocAddPermission from "./DocAddPermission";
 import DocSendPermission from "./DocSendPermission";
 import CodeEditor from "./CodeEditor";
-import Trix from 'trix';
+import CommentForm from "./CommentForm";
+import Comment from "./Comment";
 import html2pdf from "html2pdf.js";
 
-// import { useNavigate } from "react-router-dom";
-
 export default function Editor(props) {
-                    
-  const refs = useRef({});
+  const [trixSelectedRange, setTrixSelectedRange] = useState([]);
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const trixEditorRef = useRef();
+  const codeMirrorRef = useRef({});
   const {
-    newDoc,
-    setNewDoc,
     codeMode,
-    setCodeMode,
+    handleCodeModeToggle,
     currentDoc,
     setCurrentDoc,
     setIoSelectedDoc,
@@ -33,17 +32,22 @@ export default function Editor(props) {
     docs,
     token,
   } = props;
-  // const navigate = useNavigate();
 
-  // if (!token) {
-  //   navigate("/login");
-  // }
+  const handleShowCommentFormToggle = () => {
+    setShowCommentForm((current) => !current);
+  };
 
   useEffect(() => {
-    if (refs.current?.view) {console.log('EditorView:', refs.current?.view);}
-    if (refs.current?.state) {console.log('EditorState:', refs.current?.state);}
-    if (refs.current?.editor) {console.log('HTMLDivElement:', refs.current?.editor);}
-  }, [refs.current]);
+    if (codeMirrorRef.current?.view) {
+      console.log('EditorView:', codeMirrorRef.current?.view);
+    }
+    if (codeMirrorRef.current?.state) {
+      console.log('EditorState:', codeMirrorRef.current?.state);
+    }
+    if (codeMirrorRef.current?.editor) {
+      console.log('HTMLDivElement:', codeMirrorRef.current?.editor);
+    }
+  }, [codeMirrorRef.current]);
 
   function handleNameChange(event) {
     let newObject = {};
@@ -51,7 +55,6 @@ export default function Editor(props) {
     newObject["name"] = event.target.value;
 
     setCurrentDoc((old) => ({ ...old, ...newObject }));
-    setNewDoc({ ...newDoc, ...newObject });
   }
 
   function handleTrixEditorChange(text) {
@@ -60,7 +63,6 @@ export default function Editor(props) {
     newObject["content"] = text;
 
     setCurrentDoc((old) => ({ ...old, ...newObject }));
-    setNewDoc({ ...newDoc, ...newObject });
   }
 
   function handleCodeMirrorChange(value) {
@@ -69,17 +71,16 @@ export default function Editor(props) {
     newObject["content"] = value;
 
     setCurrentDoc((old) => ({ ...old, ...newObject }));
-    setNewDoc({ ...newDoc, ...newObject });
   }
 
   function handleEditorShift() {
-    setCodeMode(!codeMode);
-    setNewDoc({});
+    setCurrentDoc({});
+    handleCodeModeToggle();
   }
 
   function handleDocToPdf() {
     const margin = codeMode ? 0 : [72, 72, 72, 72];
-    const element = codeMode ? refs.current.editor
+    const element = codeMode ? codeMirrorRef.current.editor
       : document.querySelector("trix-editor").innerHTML;
     var opt = {
       margin: margin,
@@ -93,20 +94,28 @@ export default function Editor(props) {
   }
 
   function handleAddComment() {
-    const element = document.querySelector("trix-editor");
+    const trixEditor = trixEditorRef.current.editor;
+    console.log(trixEditor);
+    const range = trixEditor.getSelectedRange();
+    if (range[0] === range[1]) {
+      alert("You must select a line of text to comment on");
+      return;
+    }
 
-    console.log(element.editor);
-    // const selectedRange = element.editor.getSelectedRange();
-    // element.editor.selectedRange.style.backgroundColor = "red";
+    setTrixSelectedRange(range);
+    trixEditor.activateAttribute("backgroundColor", "#FBCEB1");
 
-    console.log(Trix.config);
+    const docLength = trixEditor.getDocument().toString().length;
+
+    trixEditor.setSelectedRange(docLength - 1);
+    trixEditor.deactivateAttribute("backgroundColor");
+    handleShowCommentFormToggle();
   }
 
   return (
     <div className="editor-wrapper">
       <div className="toolbar">
         <SaveDoc
-          newDoc={newDoc}
           currentDoc={currentDoc}
           setAlldocs={setAlldocs}
           handleNameChange={handleNameChange}
@@ -133,9 +142,11 @@ export default function Editor(props) {
         <button className="code-mode-btn" onClick={handleEditorShift}>
           {codeMode ? 'Text editor' : 'Code-mode'}
         </button>
-        <button onClick={handleAddComment}>
+        {!codeMode &&
+          <button onClick={handleAddComment}>
           Comment
-        </button>
+          </button>
+        }
         <SelectAllDocs
           docs={docs}
           codeMode={codeMode}
@@ -145,20 +156,50 @@ export default function Editor(props) {
           token={token}
         />
       </div>
-      <div className={codeMode ? "code-editor-container" : "editor-container"}>
-        {codeMode ?
-          <CodeEditor
-            className="code-mirror"
-            onChange={handleCodeMirrorChange}
-            codeMirrorValue={newDoc.content}
-            refs={refs}
-          />
-          :
-          <TrixEditor
-            className="trix-editor"
-            onChange={handleTrixEditorChange}
-          />
-        }
+      <div className="editor-container">
+        <div className={codeMode ? "code-editor-container" : "trix-editor-container"}>
+          {codeMode ?
+            <CodeEditor
+              className="code-mirror"
+              onChange={handleCodeMirrorChange}
+              codeMirrorValue={currentDoc.content}
+              codeMirrorRef={codeMirrorRef}
+            />
+            :
+            <TrixEditor
+              ref={trixEditorRef}
+              className="trix-editor"
+              onChange={handleTrixEditorChange}
+            />
+          }
+        </div>
+        <div className='comments-container'>
+          {currentDoc.comments &&
+            currentDoc.comments.map((comment, index) => {
+              return (<Comment
+                key={index}
+                id={comment.id}
+                date = {comment.date}
+                content={comment.content}
+                user={user}
+                range={comment.range}
+                trixEditor={trixEditorRef.current.editor}
+                setCurrentDoc={setCurrentDoc}
+              />);
+            })
+          }
+
+          {showCommentForm &&
+            <CommentForm
+              trixSelectedRange={trixSelectedRange}
+              handleShowCommentFormToggle={handleShowCommentFormToggle}
+              user={user}
+              trixEditor={trixEditorRef.current.editor}
+              setCurrentDoc={setCurrentDoc}
+              currentDoc={currentDoc}
+            />
+          }
+        </div>
       </div>
     </div>
   );

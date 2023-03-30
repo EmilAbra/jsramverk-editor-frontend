@@ -135,6 +135,7 @@ export default function Editor(props) {
         <div className={codeMode ? "code-editor-container" : "trix-editor-container"}>
           {codeMode ?
             <CodeEditor
+              currentDoc={currentDoc}
               setCurrentDoc={setCurrentDoc}
               codeMirrorRef={codeMirrorRef}
             />

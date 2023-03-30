@@ -71,7 +71,7 @@ const docs = {
     return allDocs.data.docs;
   },
   saveDoc: async function saveDoc(newDoc, user) {
-    newDoc.allowed_users = [user.email];
+    newDoc.allowed_users = [user];
     let response = await fetch(`${docs.baseUrl}/editor`, {
       body: JSON.stringify(newDoc),
       headers: {

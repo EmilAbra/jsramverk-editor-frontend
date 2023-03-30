@@ -6,7 +6,7 @@ import { EditorView } from '@codemirror/view';
 import codeModel from '../models/codeModel';
 import './codeEditor.css';
 
-export default function CodeEditor({ setCurrentDoc, codeMirrorRef }) {
+export default function CodeEditor({ currentDoc, setCurrentDoc, codeMirrorRef }) {
   const [content, setContent] = useState("");
   const textareaRef = useRef();
 
@@ -18,9 +18,10 @@ export default function CodeEditor({ setCurrentDoc, codeMirrorRef }) {
 
   function handleChange(value) {
     setContent(value);
-    let newObject = {codeMode: true};
-
-    newObject["content"] = value;
+    let newObject = {
+      content: value,
+      codeMode: true,
+    };
 
     setCurrentDoc((old) => ({ ...old, ...newObject }));
   }
@@ -36,7 +37,7 @@ export default function CodeEditor({ setCurrentDoc, codeMirrorRef }) {
           extensions={[javascript(), EditorView.lineWrapping]}
           className="code-mirror"
           height="500px"
-          value={content}
+          value={currentDoc.content}
           theme={okaidia}
           data-testid="code-editor"
         />

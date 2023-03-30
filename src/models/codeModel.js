@@ -7,6 +7,7 @@ const code = {
     var data = {
       code: btoa(value),
     };
+
     try {
       const response = await fetch("https://execjs.emilfolino.se/code", {
       method: "POST",
@@ -19,7 +20,6 @@ const code = {
       const decodedOutput = atob(result.data);
 
       return decodedOutput;
-
     } catch (error) {
       return (error);
     }

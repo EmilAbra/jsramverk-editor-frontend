@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import "./App.css";
 
 
-// const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
+const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
 
 let sendToSocket = false;
 
@@ -28,9 +28,9 @@ function App() {
   const [user, setUser] = useState({});
   const [codeMode, setCodeMode] = useState(false);
 
-  useEffect(() => {
-    console.log(currentDoc);
-  }, [currentDoc]);
+  // useEffect(() => {
+  //   console.log(currentDoc);
+  // }, [currentDoc]);
 
   useEffect(() => {
     if (token) {
@@ -47,11 +47,11 @@ function App() {
     };
   }, []);
 
-  // useEffect(() => {
-  //     (async () => {
-  //       await fetchDocs();
-  //     })();
-  // }, []);
+  useEffect(() => {
+      (async () => {
+        await fetchDocs();
+      })();
+  }, []);
 
   useEffect(() => {
     if (socket && sendToSocket) {
@@ -66,14 +66,14 @@ function App() {
     }
   }, [ioSelectedDoc]);
 
-  // useEffect(() => {
-  //   setSocket(io(SERVER_URL));
-  //   return () => {
-  //     if (socket) {
-  //         socket.disconnect();
-  //     }
-  //   };
-  // }, []);
+  useEffect(() => {
+    setSocket(io(SERVER_URL));
+    return () => {
+      if (socket) {
+          socket.disconnect();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (socket) {

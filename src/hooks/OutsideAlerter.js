@@ -39,6 +39,7 @@ function useOutsideAlerter(ref, props) {
  */
 function OutsideAlerter(props) {
   const wrapperRef = useRef(null);
+
   useOutsideAlerter(wrapperRef, props);
 
   return <div ref={wrapperRef}>{props.children}</div>;

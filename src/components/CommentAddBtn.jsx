@@ -12,6 +12,7 @@ export default function CommentAddBtn(props) {
 
   function handleAddComment() {
     const range = trixEditorSelectedRange();
+
     if (range[0] === range[1]) {
       alert("You must select a line of text to comment on");
       return;
@@ -28,5 +29,5 @@ export default function CommentAddBtn(props) {
     <button onClick={handleAddComment}>
       Comment
     </button>
-  )
+  );
 }

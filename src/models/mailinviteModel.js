@@ -11,6 +11,7 @@ const mail = {
             toMailAddress: toMailAddress,
             urlAdress: `${mail.baseUrl}/`
         };
+
         let response = await fetch(`${mail.baseUrl}/editor/mail_invite`, {
             body: JSON.stringify(data),
             headers: {

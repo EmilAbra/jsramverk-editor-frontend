@@ -21,7 +21,7 @@ export default function Editor(props) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const trixEditorRef = useRef();
   const codeMirrorRef = useRef({});
-  
+
   const {
     codeMode,
     handleCodeModeToggle,
@@ -36,6 +36,7 @@ export default function Editor(props) {
   } = props;
 
   let trixEditor;
+
   if (trixEditorRef.current) {
     trixEditor = trixEditorRef.current.editor;
   }

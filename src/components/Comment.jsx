@@ -73,7 +73,11 @@ export default function Comment(props) {
   }
 
   return (
-    <div className='comment-wrapper' data-testid="comment" onClick={canClickOnComment ? handleCommentClick : undefined}>
+    <div
+      className='comment-wrapper'
+      data-testid="comment"
+      onClick={canClickOnComment ? handleCommentClick : undefined}
+    >
       <div className='comment-header'>
         <div className='comment-header-info'>
           <h4>{user}</h4>

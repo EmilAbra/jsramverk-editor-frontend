@@ -2,7 +2,6 @@ import React from 'react';
 import html2pdf from "html2pdf.js";
 
 export default function DocToPdf({ codeMode, codeMirrorRef }) {
-
   function handleDocToPdf() {
     const margin = codeMode ? 0 : [72, 72, 72, 72];
     const element = codeMode ? codeMirrorRef.current.editor
@@ -22,5 +21,5 @@ export default function DocToPdf({ codeMode, codeMirrorRef }) {
     <button onClick={handleDocToPdf}>
       Export as PDF
     </button>
-  )
+  );
 }

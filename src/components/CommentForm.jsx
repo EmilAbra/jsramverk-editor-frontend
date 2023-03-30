@@ -28,7 +28,7 @@ export default function CommentForm(props) {
   }
 
   function handleSubmitComment(event) {
-    if (commentContent === "") return;
+    if (commentContent === "") { return; }
     event.preventDefault();
     const today = new Date();
     const hours = String((today.getHours() < 10 ? '0' : '') + today.getHours());

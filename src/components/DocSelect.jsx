@@ -13,6 +13,7 @@ export default function SelectAllDocs(props) {
 
   async function fetchDoc(event) {
     const docName = event.target.value;
+
     event.target.selectedIndex = "0";
 
     if (docName !== "-99") {

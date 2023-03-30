@@ -5,7 +5,6 @@ import "trix/dist/trix.css";
 import "./textEditor.css";
 
 export default function TextEditor({ trixEditorRef, setCurrentDoc }) {
-
   function handleChange(text) {
     let newObject = {codeMode: false};
 
@@ -23,5 +22,5 @@ export default function TextEditor({ trixEditorRef, setCurrentDoc }) {
       autoFocus
       aria-label="text-editor"
     />
-  )
+  );
 }

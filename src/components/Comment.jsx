@@ -73,7 +73,7 @@ export default function Comment(props) {
   }
 
   return (
-    <div className='comment-wrapper' onClick={canClickOnComment ? handleCommentClick : undefined}>
+    <div className='comment-wrapper' data-testid="comment" onClick={canClickOnComment ? handleCommentClick : undefined}>
       <div className='comment-header'>
         <div className='comment-header-info'>
           <h4>{user}</h4>
@@ -83,6 +83,7 @@ export default function Comment(props) {
           <GrClose
             onClick={handleDeleteComment}
             className='delete-comment-icon'
+            data-testid="delete-comment-icon"
           />
         </div>
       </div>

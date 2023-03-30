@@ -26,6 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "CI=true npm test -- --env=jsdom --coverage",
     "eject": "react-scripts eject",
     "deploy": "npm run build && rsync -av --delete build/ emab21@ssh.student.bth.se:www/editor",
     "eslint": "eslint ."
@@ -49,13 +50,14 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/dom": "^8.18.1",
+    "@testing-library/dom": "^8.20.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "eslint": "^8.24.0",
     "eslint-plugin-react": "^7.31.8",
-    "javascript-style-guide": "^1.0.1"
+    "javascript-style-guide": "^1.0.1",
+    "jest-canvas-mock": "^2.5.0"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",

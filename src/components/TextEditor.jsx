@@ -16,9 +16,12 @@ export default function TextEditor({ trixEditorRef, setCurrentDoc }) {
 
   return (
     <TrixEditor
+      data-testid="trix-editor"
       ref={trixEditorRef}
       className="trix-editor"
       onChange={handleChange}
+      autoFocus
+      aria-label="text-editor"
     />
   )
 }

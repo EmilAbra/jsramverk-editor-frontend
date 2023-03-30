@@ -3,7 +3,7 @@ import docsModel from "../models/docsModel";
 import mailModel from "../models/mailinviteModel";
 
 export default function DocSendPermission(props) {
-  const [sendToMailAddress, setSendToMailAddress] = useState("");
+  const [mailAddress, setMailAddress] = useState("");
 
   async function handleSendPermission(event) {
     event.preventDefault();
@@ -12,21 +12,21 @@ export default function DocSendPermission(props) {
       alert("No document is selected!");
       return;
     }
-    if (props.currentDoc.allowed_users.includes(sendToMailAddress)) {
+    if (props.currentDoc.allowed_users.includes(mailAddress)) {
       alert("Permission already exist!");
       return;
     }
 
-    const result = await mailModel.sendMail(sendToMailAddress);
+    const result = await mailModel.sendMail(mailAddress);
 
     if (result.status === 200) {
       alert("The invitation has been sent successfully!");
 
       props.setCurrentDoc((prev) => {
-        return {...prev, allowed_users: [...prev.allowed_users, sendToMailAddress]};
+        return {...prev, allowed_users: [...prev.allowed_users, mailAddress]};
       });
       await docsModel.updateDoc(props.currentDoc);
-      setSendToMailAddress("");
+      setMailAddress("");
       return;
     } else if (result.status === 401) {
       alert("The email address does not exist!");
@@ -41,13 +41,14 @@ export default function DocSendPermission(props) {
         <label htmlFor="send_permission">Send Permission: </label>
         <input
           id="send_permission"
-          name="permission"
+          aria-label="send_permission"
+          name="send_permission"
           type="email"
           placeholder="email"
           required={true}
           minLength={6}
-          value={sendToMailAddress}
-          onChange={(e) => setSendToMailAddress(e.target.value)}
+          value={mailAddress}
+          onChange={(e) => setMailAddress(e.target.value)}
         />
         <button>Send</button>
       </form>

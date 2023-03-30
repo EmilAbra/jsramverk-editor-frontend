@@ -30,6 +30,7 @@ export default function CodeEditor({ setCurrentDoc, codeMirrorRef }) {
       <div className="editor-title">JS</div>
       <div>
         <CodeMirror
+          placeholder={"Happy coding!"}
           ref={codeMirrorRef}
           onChange={handleChange}
           extensions={[javascript(), EditorView.lineWrapping]}
@@ -37,12 +38,13 @@ export default function CodeEditor({ setCurrentDoc, codeMirrorRef }) {
           height="500px"
           value={content}
           theme={okaidia}
+          data-testid="code-editor"
         />
       </div>
       <button className="exe-code-btn" onClick={executeCode}>
         Run code
       </button>
-      <textarea ref={textareaRef} className="code-result-container"></textarea>
+      <textarea data-testid="result" ref={textareaRef} className="code-result-container"></textarea>
     </>
   );
 }

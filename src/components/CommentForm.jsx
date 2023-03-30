@@ -28,6 +28,7 @@ export default function CommentForm(props) {
   }
 
   function handleSubmitComment(event) {
+    if (commentContent === "") return;
     event.preventDefault();
     const today = new Date();
     const hours = String((today.getHours() < 10 ? '0' : '') + today.getHours());
@@ -71,8 +72,9 @@ export default function CommentForm(props) {
           <h4>{user}</h4>
           <input
             placeholder="Enter comment"
+            aria-label="comment-form-input"
             type="text"
-            name="comment"
+            name="comment-form-input"
             id="comment-input"
             value={commentContent}
             onChange={handleChange}

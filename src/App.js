@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import "./App.css";
 
 
-// const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
+const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
 
 let sendToSocket = false;
 
@@ -47,27 +47,27 @@ function App() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (socket && sendToSocket) {
-  //     socket.emit("docsData", currentDoc);
-  //   }
-  //   changeSendToSocket(true);
-  // }, [currentDoc]);
+  useEffect(() => {
+    if (socket && sendToSocket) {
+      socket.emit("docsData", currentDoc);
+    }
+    changeSendToSocket(true);
+  }, [currentDoc]);
 
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.emit("create", ioSelectedDoc._id);
-  //   }
-  // }, [ioSelectedDoc]);
+  useEffect(() => {
+    if (socket) {
+      socket.emit("create", ioSelectedDoc._id);
+    }
+  }, [ioSelectedDoc]);
 
-  // useEffect(() => {
-  //   setSocket(io(SERVER_URL));
-  //   return () => {
-  //     if (socket) {
-  //         socket.disconnect();
-  //     }
-  //   };
-  // }, []);
+  useEffect(() => {
+    setSocket(io(SERVER_URL));
+    return () => {
+      if (socket) {
+          socket.disconnect();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (socket) {

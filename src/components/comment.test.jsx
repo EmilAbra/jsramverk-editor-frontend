@@ -10,11 +10,11 @@ test("should render a comment", () => {
     user: 'test@test.com',
   };
   render(
-      <Comment 
-          date={comment.date}
-          content={comment.content}
-          user={comment.user}
-      />
+    <Comment 
+      date={comment.date}
+      content={comment.content}
+      user={comment.user}
+    />
   );
 
   const commentUser = screen.getByRole('heading', { name: /test@test\.com/i });

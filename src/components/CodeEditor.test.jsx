@@ -6,7 +6,6 @@ test("renders codemirror editor", () => {
     content: ""
   }
   render(<CodeEditor currentDoc={currentDoc} />);
-  screen.logTestingPlaygroundURL();
   const editor = screen.getByText(/Happy coding!/i);
   expect(editor).toBeInTheDocument();
 });

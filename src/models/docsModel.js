@@ -11,11 +11,18 @@ const docs = {
     var query = `
       query getOneDoc($name: String!){
         doc (name: $name){
+          _id
           name
           content
           allowed_users
           codeMode
-          comments
+          comments {
+            id
+            date
+            user
+            content
+            range
+          }
         } 
       }
     `;
@@ -35,7 +42,7 @@ const docs = {
       })
     });
     const oneDoc = await response.json();
-
+    console.log(oneDoc);
     return oneDoc.data.doc;
   },
   getAllDocs: async function getAllDocs(token, user) {
@@ -43,11 +50,18 @@ const docs = {
     var query = `
       query getAllDocs($allowed_user: String!){
         docs (allowed_user: $allowed_user){
+          _id
           name
           content
           allowed_users
           codeMode
-          comments
+          comments {
+            id
+            date
+            user
+            content
+            range
+          }
         } 
       }
     `;
@@ -71,6 +85,7 @@ const docs = {
     return allDocs.data.docs;
   },
   saveDoc: async function saveDoc(newDoc, user) {
+    console.log("saves...");
     newDoc.allowed_users = [user];
     let response = await fetch(`${docs.baseUrl}/editor`, {
       body: JSON.stringify(newDoc),

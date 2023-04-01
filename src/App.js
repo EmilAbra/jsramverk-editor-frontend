@@ -10,8 +10,7 @@ import docsModel from './models/docsModel';
 import { useState, useEffect } from 'react';
 import "./App.css";
 
-
-const SERVER_URL = 'https://jsramverk-editor-emab21.azurewebsites.net';
+const SERVER_URL = 'http://localhost:1337/';
 
 let sendToSocket = false;
 
@@ -27,10 +26,15 @@ function App() {
   const [token, setToken] = useState("");
   const [user, setUser] = useState({});
   const [codeMode, setCodeMode] = useState(false);
+  const [codeMirrorContent, setCodeMirrorContent] = useState("");
 
-  useEffect(() => {
-    console.log(currentDoc);
-  }, [currentDoc]);
+  // useEffect(() => {
+  //   console.log(docs);
+  // }, [docs]);
+
+  // useEffect(() => {
+  //   console.log(currentDoc);
+  // }, [currentDoc]);
 
   useEffect(() => {
     if (token) {
@@ -89,12 +93,8 @@ function App() {
 
   function setEditorContent(content, triggerChange) {
     if (codeMode) {
-      let newObject = {
-        content: content
-      };
-
       changeSendToSocket(triggerChange);
-      setCurrentDoc((old) => ({ ...old, ...newObject }));
+      setCodeMirrorContent(content);
       changeSendToSocket(triggerChange);
     } else {
       let element = document.querySelector("trix-editor");
@@ -126,10 +126,12 @@ function App() {
                   currentDoc={currentDoc}
                   user={user.email}
                   token={token}
+                  codeMirrorContent={codeMirrorContent}
+                  setCodeMirrorContent={setCodeMirrorContent}
                 />}
               />
             :
-              <Route exact path="/login"
+              <Route exact path="/"
                 element={<LoginAuth
                   token={token}
                   setToken={setToken}

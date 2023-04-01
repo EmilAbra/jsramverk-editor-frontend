@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
@@ -6,18 +6,23 @@ import { EditorView } from '@codemirror/view';
 import codeModel from '../models/codeModel';
 import './codeEditor.css';
 
-export default function CodeEditor({ currentDoc, setCurrentDoc, codeMirrorRef }) {
-  const [content, setContent] = useState("");
+export default function CodeEditor(props) {
+  const {
+    codeMirrorContent,
+    setCodeMirrorContent,
+    setCurrentDoc,
+    codeMirrorRef
+  } = props;
   const textareaRef = useRef();
 
   async function executeCode() {
-    const result = await codeModel.getCodeResult(content);
+    const result = await codeModel.getCodeResult(codeMirrorContent);
 
     textareaRef.current.value = result;
   }
 
   function handleChange(value) {
-    setContent(value);
+    setCodeMirrorContent(value);
     let newObject = {
       content: value,
       codeMode: true,
@@ -37,9 +42,8 @@ export default function CodeEditor({ currentDoc, setCurrentDoc, codeMirrorRef })
           extensions={[javascript(), EditorView.lineWrapping]}
           className="code-mirror"
           height="500px"
-          value={currentDoc.content}
+          value={codeMirrorContent}
           theme={okaidia}
-          data-testid="code-editor"
         />
       </div>
       <button className="exe-code-btn" onClick={executeCode}>

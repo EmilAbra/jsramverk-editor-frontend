@@ -33,6 +33,8 @@ export default function Editor(props) {
     user,
     docs,
     token,
+    codeMirrorContent,
+    setCodeMirrorContent
   } = props;
 
   let trixEditor;
@@ -58,10 +60,12 @@ export default function Editor(props) {
   // }, [codeMirrorRef.current]);
 
   function setTrixEditorSelection(currentRange) {
+    console.log("set selection");
     trixEditor.setSelectedRange(currentRange);
   }
 
   function setTrixEditorSelectionToEnd() {
+    console.log("set marker to end");
     const docLength = trixEditor.getDocument().toString().length;
 
     setTrixEditorSelection(docLength - 1);
@@ -72,6 +76,7 @@ export default function Editor(props) {
   }
 
   function unsetTrixEditorTextBackground() {
+    console.log("unset background color");
     trixEditor.deactivateAttribute("backgroundColor");
   }
 
@@ -96,6 +101,7 @@ export default function Editor(props) {
         <DocSendPermission
           currentDoc={currentDoc}
           setCurrentDoc={setCurrentDoc}
+          token={token}
         />
       </div>
       <div className="toolbar">
@@ -129,6 +135,7 @@ export default function Editor(props) {
           setCurrentDoc={setCurrentDoc}
           setIoSelectedDoc={setIoSelectedDoc}
           token={token}
+          setCodeMirrorContent={setCodeMirrorContent}
         />
       </div>
       <div className="editor-container">
@@ -138,6 +145,8 @@ export default function Editor(props) {
               currentDoc={currentDoc}
               setCurrentDoc={setCurrentDoc}
               codeMirrorRef={codeMirrorRef}
+              codeMirrorContent={codeMirrorContent}
+              setCodeMirrorContent={setCodeMirrorContent}
             />
             :
             <TextEditor

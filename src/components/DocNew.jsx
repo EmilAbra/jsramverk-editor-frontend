@@ -1,14 +1,11 @@
 import React from "react";
 
-const initialState = {
-  name: "",
-  content: "",
-};
+const initialState = {};
 
 export default function NewDoc(props) {
   function resetState() {
     props.setCurrentDoc(initialState);
-    props.setEditorContent("");
+    props.setEditorContent("", true);
   }
 
   return (

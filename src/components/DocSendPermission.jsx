@@ -7,16 +7,17 @@ export default function DocSendPermission(props) {
 
   async function handleSendPermission(event) {
     event.preventDefault();
-
-    if (!props.currentDoc.length) {
-      alert("No document is selected!");
-      return;
-    }
-    if (props.currentDoc.allowed_users.includes(mailAddress)) {
+    const allowed_users = props.currentDoc.allowed_users;
+    if (allowed_users && allowed_users.includes(mailAddress)) {
       alert("Permission already exist!");
       return;
     }
+    const doc = await docsModel.getDoc(props.currentDoc.name, props.token);
 
+    if (!doc) {
+      alert("No document is selected!");
+      return;
+    }
     const result = await mailModel.sendMail(mailAddress);
 
     if (result.status === 200) {

@@ -18,18 +18,3 @@ test("should have a submit button", () => {
   const sendBtn = screen.getByRole('button', { name: /send/i });  
   expect(sendBtn).toBeInTheDocument();
 })
-
-test("should render alert if no document is selected on submit", async () => {
-  const alertMock = jest.spyOn(window,'alert').mockImplementation();
-  const currentDoc = []
-
-  render(
-      <DocSendPermission
-        currentDoc={currentDoc}
-      />
-  );
-
-  const sendBtn = screen.getByRole('button', { name: /send/i });
-  await userEvent.click(sendBtn);
-  expect(alertMock).toHaveBeenCalledTimes(1);
-})

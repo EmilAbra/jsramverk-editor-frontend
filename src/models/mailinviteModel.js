@@ -8,8 +8,7 @@ const mail = {
     : "https://jsramverk-editor-emab21.azurewebsites.net",
     sendMail: async function sendMail(toMailAddress) {
         var data = {
-            toMailAddress: toMailAddress,
-            urlAdress: `${mail.baseUrl}/`
+            toMailAddress: toMailAddress
         };
 
         let response = await fetch(`${mail.baseUrl}/editor/mail_invite`, {

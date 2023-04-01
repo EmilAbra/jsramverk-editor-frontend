@@ -35,17 +35,15 @@ export default function Comment(props) {
     setTrixEditorSelection(range[0]);
   }
 
-  function handleDeleteComment() {
+  async function handleDeleteComment() {
+    await setCurrentDoc((prev) => {
+      return {...prev, comments: prev.comments.filter(
+        comment => comment.id !== id
+      )};
+    });
     setTrixEditorSelection(range);
     unsetTrixEditorTextBackground();
     setTrixEditorSelectionToEnd();
-
-    setCurrentDoc(prevState => ({
-      comments: prevState.comments.filter(
-        comment => comment.id !== id
-        )
-      })
-    );
   }
 
   function handleContentChange(event) {

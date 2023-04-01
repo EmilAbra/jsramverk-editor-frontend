@@ -8,7 +8,8 @@ export default function SelectAllDocs(props) {
     setEditorContent,
     setCurrentDoc,
     setIoSelectedDoc,
-    token
+    token,
+    setCodeMirrorContent
   } = props;
 
   async function fetchDoc(event) {
@@ -18,7 +19,9 @@ export default function SelectAllDocs(props) {
 
     if (docName !== "-99") {
       const doc = await docsModel.getDoc(docName, token);
-
+      if (codeMode) {
+        setCodeMirrorContent(doc.content)
+      };
       setCurrentDoc(doc);
       setIoSelectedDoc(doc);
       setEditorContent(doc.content, true);

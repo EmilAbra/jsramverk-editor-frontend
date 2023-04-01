@@ -8,7 +8,7 @@ export default function DocAddPermission(props) {
   async function handlePermission(event) {
     event.preventDefault();
     const user = await authModel.getUser(userName);
-
+ 
     if (user.status === 200) {
       if (props.currentDoc.allowed_users.includes(userName)) {
         alert("Permission already exist.");
@@ -21,6 +21,9 @@ export default function DocAddPermission(props) {
 
       if (result.status === 204) {
         alert(`Permission for ${userName} successfully registered.`);
+        return;
+      } else {
+        console.error("Something went wrong " + result.status);
       }
     } else if (user.status === 401) {
       alert(`User ${userName} does not exist.`);
